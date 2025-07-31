@@ -267,7 +267,7 @@ const Gallery = () => {
         <span className="text-sm font-medium text-blue-400 tracking-widest uppercase mb-4 inline-block">Portfolio</span>
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Our Creative Work</h2>
         <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto mb-6 rounded-full"></div>
-        <p className="text-lg text-gray-300 leading-relaxed">Discover our curated selection of projects that showcase our expertise and commitment to excellence in every detail.</p>
+        <p className="text-xl text-gray-300 leading-relaxed font-sans">Discover our curated selection of projects that showcase our expertise and commitment to excellence in every detail.</p>
       </div>
       <div 
         ref={galleryRef}

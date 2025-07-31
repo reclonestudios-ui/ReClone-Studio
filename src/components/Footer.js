@@ -1,11 +1,11 @@
 import React from 'react';
-import { FaDiscord, FaYoutube, FaTwitter } from 'react-icons/fa';
+import { FaDiscord, FaYoutube, FaMailchimp } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="bg-black text-white py-10 px-4 relative z-10">
+    <footer className="bg-black text-white py-10 px-4 font-sans relative z-10">
       <div className="absolute inset-0 bg-black -z-10"></div>
       <div className="max-w-7xl mx-auto relative">
         <div className="flex flex-col md:flex-row justify-between items-center">
@@ -19,7 +19,7 @@ const Footer = () => {
               href="https://discord.gg/example" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-gray-300 hover:text-white transition-colors duration-300 text-xl"
+              className="text-gray-300 hover:text-blue-600 transition-colors duration-300 text-xl"
               aria-label="Discord"
             >
               <FaDiscord className="w-6 h-6" />
@@ -28,20 +28,20 @@ const Footer = () => {
               href="https://youtube.com/example" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-gray-300 hover:text-white transition-colors duration-300 text-xl"
+              className="text-gray-300 hover:text-red-600 transition-colors duration-300 text-xl"
               aria-label="YouTube"
             >
               <FaYoutube className="w-6 h-6" />
             </a>
-            <a 
+            {/* <a 
               href="https://twitter.com/example" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-gray-300 hover:text-white transition-colors duration-300 text-xl"
-              aria-label="Twitter"
+              aria-label="E-Mail"
             >
-              <FaTwitter className="w-6 h-6" />
-            </a>
+              <FaMailchimp className="w-6 h-6" />
+            </a> */}
           </div>
         </div>
         
@@ -49,13 +49,13 @@ const Footer = () => {
           <p className="text-gray-400 text-sm">
             &copy; {currentYear} Reclone Studios. All rights reserved.
           </p>
-          <div className="mt-2 flex justify-center space-x-4 text-xs text-gray-500">
+          {/* <div className="mt-2 flex justify-center space-x-4 text-xs text-gray-500">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <span>•</span>
             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             <span>•</span>
             <a href="#" className="hover:text-white transition-colors">Contact Us</a>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

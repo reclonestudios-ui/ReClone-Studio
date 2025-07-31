@@ -37,7 +37,7 @@ const AboutStudio = () => {
 
   const features = [
     { 
-      icon: <FaGamepad className="text-3xl mb-4 text-blood-red" />, 
+      icon: <FaGamepad className="text-3xl  mb-4 text-blood-red" />, 
       title: "Immersive Games",
       description: "Crafting unforgettable gaming experiences"
     },
@@ -85,7 +85,7 @@ const AboutStudio = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setActiveTab('about')}
-              className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 ${
+              className={`px-8 py-3 rounded-xl font-medium font-sans transition-all duration-300 ${
                 activeTab === 'about' 
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/20' 
                   : 'bg-gray-800/80 text-gray-300 hover:bg-gray-700/80 border border-gray-700 backdrop-blur-sm'
@@ -97,7 +97,7 @@ const AboutStudio = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setActiveTab('mission')}
-              className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 ${
+              className={`px-8 py-3 rounded-xl font-medium font-sans transition-all duration-300 ${
                 activeTab === 'mission' 
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/20' 
                   : 'bg-gray-800/80 text-gray-300 hover:bg-gray-700/80 border border-gray-700 backdrop-blur-sm'
@@ -116,11 +116,11 @@ const AboutStudio = () => {
               transition={{ duration: 0.3 }}
             >
               {activeTab === 'about' ? (
-                <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-lg text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed">
                   Reclone Studios is a passionate team of developers and artists dedicated to creating immersive, high-quality gaming experiences. We believe in the power of storytelling and cutting-edge technology to transport players to new worlds.
                 </p>
               ) : (
-                <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-lg text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed">
                   Our mission is to push the boundaries of interactive entertainment, creating games that resonate with players on a deep emotional level while delivering unparalleled gameplay experiences.
                 </p>
               )}
@@ -129,7 +129,7 @@ const AboutStudio = () => {
         </motion.div>
 
         <motion.div 
-          className="grid md:grid-cols-3 gap-8 mb-12"
+          className="grid md:grid-cols-3 font-sans gap-8 mb-12"
           variants={staggerContainer}
         >
           {features.map((feature, index) => (

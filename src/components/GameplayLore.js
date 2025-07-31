@@ -146,7 +146,7 @@ const LoreSection = React.memo(({ title, content, media, mediaRight }) => {
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 font-serif">
               {title}
             </h2>
-            <p className="text-gray-300 text-base md:text-lg leading-relaxed">
+            <p className="text-gray-100 font-sans  md:text-lg leading-relaxed">
               {content}
             </p>
           </div>
@@ -206,7 +206,7 @@ const GameplayLore = () => {
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4 font-serif">
           The Lore of the Shattered Realms
         </h1>
-        <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
+        <p className="text-lg md:text-xl font-sans text-gray-300 max-w-3xl mx-auto px-4">
           Discover the rich history and mysteries of our world
         </p>
       </div>
