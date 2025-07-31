@@ -25,7 +25,7 @@ const Footer = () => {
               <FaDiscord className="w-6 h-6" />
             </a>
             <a 
-              href="https://youtube.com/example" 
+              href="https://youtube.com/" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-gray-300 hover:text-red-600 transition-colors duration-300 text-xl"

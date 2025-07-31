@@ -29,13 +29,13 @@ const loreSections = [
   {
     title: "Echoes of Eternity: Ancient Architecture",
     content: "Wander through the breathtaking ruins of a bygone era. Discover colossal structures and intricate designs that whisper tales of forgotten gods and powerful civilizations, each stone steeped in history and ripe for exploration.",
-    media: "/temple.mp4", // Replace with your architecture video
+    media: "/temple.webm", // Replace with your architecture video
     mediaRight: false
   },
   {
     title: "Worlds Beyond Imagination: Creative Environments",
     content: "Traverse truly unique and visually stunning landscapes. From shimmering crystal caverns and sky-piercing cities to swirling elemental plains, each environment offers a new set of challenges and awe-inspiring vistas.",
-    media: "/environment.mp4", // Replace with your environment video
+    media: "/environment.webm", // Replace with your environment video
     mediaRight: true
   }
 ];
