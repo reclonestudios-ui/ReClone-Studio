@@ -33,7 +33,7 @@ const Header = () => {
         >
           <a href="#" className="flex items-center group">
             <img 
-              src="/logo.jpg" 
+              src="/white.png" 
               alt="ReClone Studios Logo" 
               className="h-10 sm:h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
             />
