@@ -16,7 +16,7 @@ const Footer = () => {
           
           <div className="flex space-x-6">
             <a 
-              href="https://discord.gg/example" 
+              href="https://discord.gg/5QdhYNQ5sR" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-gray-300 hover:text-blue-600 transition-colors duration-300 text-xl"
