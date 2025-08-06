@@ -1,110 +1,71 @@
-import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const loreSections = [
-  // {
-  //   title: "The Shattered Realms",
-  //   content: "Once a unified world of magic and balance, the realms were torn asunder by the Cataclysm, an event that fractured reality itself. Now, scattered fragments float in the void, each holding remnants of the old world and secrets of the new order.",
-  //   media: "/realm-fracture.mp4",
-  //   mediaRight: false
-  // },
-  // {
-  //   title: "The Ancient Ones",
-  //   content: "Before the fall, the Ancient Ones ruled with wisdom and power. Their artifacts and ruins still dot the landscape, containing untold power for those brave enough to seek them.",
-  //   media: "/ancient-ruins.mp4",
-  //   mediaRight: true
-  // },
-  // {
-  //   title: "The Void Between",
-  //   content: "The spaces between realms are not empty. Strange entities drift in the void, watching, waiting. Some say they seek to mend the broken world, while others believe they hunger for what remains of reality.",
-  //   media: "/void-between.mp4",
-  //   mediaRight: false
-  // },
-  // {
-  //   title: "The Dance of Steel and Shadow: Dynamic Combat",
-  //   content: "Engage in visceral, fast-paced combat where every move matters. Master a diverse arsenal of weapons, each with unique abilities, and weave devastating spells to dominate your foes across varied and unpredictable battlegrounds.",
-  //   media: "/banner vid.mp4", // Replace with your combat video
-  //   mediaRight: true
-  // },
   {
     title: "Echoes of Eternity: Ancient Architecture",
     content: "Wander through the breathtaking ruins of a bygone era. Discover colossal structures and intricate designs that whisper tales of forgotten gods and powerful civilizations, each stone steeped in history and ripe for exploration.",
-    media: "/temple.webm", // Replace with your architecture video
+    media: "/temple480.webm",
+
+    mediaAlt: "Ancient ruins with intricate carvings and towering stone structures",
     mediaRight: false
   },
   {
     title: "Worlds Beyond Imagination: Creative Environments",
     content: "Traverse truly unique and visually stunning landscapes. From shimmering crystal caverns and sky-piercing cities to swirling elemental plains, each environment offers a new set of challenges and awe-inspiring vistas.",
-    media: "/environment.webm", // Replace with your environment video
+    media: "/environment480.webm",
+
+    mediaAlt: "Stunning fantasy landscape with floating islands and magical elements",
     mediaRight: true
   }
 ];
 
-// Optimized video component with intersection observer
-const VideoPlayer = React.memo(({ src, className }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+// Simple video component with autoplay when in view
+const Video = React.memo(({ src, className, alt }) => {
   const videoRef = useRef(null);
   const [ref, inView] = useInView({
     threshold: 0.1,
-    triggerOnce: true,
+    rootMargin: '200px 0px',
   });
 
+  // Handle play/pause based on visibility
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     if (inView) {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          // Auto-play was prevented
-          console.log('Auto-play prevented:', error);
-        });
-      }
-      setIsPlaying(true);
+      video.play().catch(error => {
+        console.log('Auto-play prevented:', error);
+      });
     } else {
       video.pause();
-      setIsPlaying(false);
     }
-
-    return () => {
-      if (video) {
-        video.pause();
-        video.currentTime = 0;
-      }
-    };
   }, [inView]);
 
   return (
-    <div ref={ref} className={className}>
-      {inView && (
-        <Suspense fallback={
-          <div className="w-full h-full bg-gray-800 animate-pulse rounded-lg"></div>
-        }>
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover rounded-lg"
-            preload="metadata"
-            style={{
-              opacity: isPlaying ? 1 : 0,
-              transition: 'opacity 0.5s ease-in-out',
-              willChange: 'opacity',
-            }}
-          >
-            <source src={`${src}#t=0.1`} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </Suspense>
-      )}
+    <div ref={ref} className={`w-full h-full overflow-hidden rounded-lg ${className}`}>
+      <video
+        ref={videoRef}
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className="w-full h-full object-cover"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+        aria-label={alt}
+      >
+        <source src={src} type="video/webm" />
+        Your browser does not support the video tag.
+      </video>
     </div>
   );
 });
 
-const LoreSection = React.memo(({ title, content, media, mediaRight }) => {
+const LoreSection = React.memo(({ title, content, media, mediaAlt, mediaRight }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef();
   const observerRef = useRef();
@@ -152,10 +113,11 @@ const LoreSection = React.memo(({ title, content, media, mediaRight }) => {
           </div>
           
           {/* Video */}
-          <div className="w-full md:w-1/2 h-56 md:h-80 lg:h-96 rounded-lg overflow-hidden">
-            <VideoPlayer 
+          <div className="w-full md:w-1/2 h-56 md:h-80 lg:h-96">
+            <Video 
               src={media}
-              className="w-full h-full"
+              alt={mediaAlt || title}
+              className="shadow-lg"
             />
           </div>
         </div>
