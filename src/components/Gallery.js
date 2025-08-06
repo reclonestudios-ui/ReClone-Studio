@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Section from './Section';
-import Lightbox from './Lightbox';
 
-// Only import GSAP plugins if in browser
-typeof window !== 'undefined' && gsap.registerPlugin(ScrollTrigger);
+// Lazy load Lightbox to reduce initial bundle size
+const Lightbox = lazy(() => import('./Lightbox'));
+
+// Optimize GSAP initialization
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.ticker.fps(60);
+  gsap.ticker.lagSmoothing(0);
+}
 
 // Array of images from the public folder with different aspect ratios for the bento grid
 const galleryImages = [
@@ -23,14 +29,35 @@ const galleryImages = [
   { id: 15, src: '/HighresScreenshot00053.webp', rowSpan: 'md:row-span-1', colSpan: 'md:col-span-2' },
 ];
 
-// Preload images in the background
+// Preload critical images with priority
 const preloadImages = (images) => {
   if (typeof window === 'undefined') return;
   
-  images.forEach(({ src }) => {
-    const img = new Image();
-    img.src = src;
+  // Preload first 3 images immediately
+  images.slice(0, 3).forEach(({ src }) => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = src;
+    document.head.appendChild(link);
   });
+  
+  // Lazy load the rest with IntersectionObserver
+  const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+  if (lazyImages.length > 0) {
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.add('lazyloaded');
+          imageObserver.unobserve(img);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    lazyImages.forEach(img => imageObserver.observe(img));
+  }
 };
 
 // Professional gallery styles with dark theme and improved text visibility
@@ -114,67 +141,127 @@ const galleryStyles = {
   },
 };
 
-// Optimized Image Component with Intersection Observer
+// Optimized LazyImage component with better loading states and error handling
 const LazyImage = React.memo(({ src, alt, style, onLoad, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const imgRef = useRef();
   const observerRef = useRef();
+  const [isInView, setIsInView] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  // Handle image load
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+    onLoad?.();
+  }, [onLoad]);
+
+  // Handle image error
+  const handleError = useCallback(() => {
+    setHasError(true);
+    console.error(`Failed to load image: ${src}`);
+  }, [src]);
 
   useEffect(() => {
     const img = imgRef.current;
     if (!img) return;
 
-    if ('IntersectionObserver' in window) {
-      const handleIntersect = (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            img.onload = () => {
-              setIsLoaded(true);
-              onLoad?.();
-            };
-            observerRef.current?.disconnect();
-          }
-        });
-      };
-
-      observerRef.current = new IntersectionObserver(handleIntersect, {
-        rootMargin: '200px',
-        threshold: 0.01
-      });
-
-      observerRef.current.observe(img);
-
-      return () => {
-        if (observerRef.current) {
-          observerRef.current.disconnect();
-        }
-      };
-    } else {
-      // Fallback for browsers that don't support IntersectionObserver
+    // If already loaded or in view, start loading
+    if (isInView || img.complete) {
       img.src = src;
-      img.onload = () => {
-        setIsLoaded(true);
-        onLoad?.();
-      };
+      return;
     }
-  }, [src, onLoad]);
+
+    // Set up intersection observer for lazy loading
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsInView(true);
+        img.src = src;
+        observer.unobserve(img);
+      }
+    }, {
+      rootMargin: '200px 0px',
+      threshold: 0.01
+    });
+
+    observer.observe(img);
+    observerRef.current = observer;
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [src, isInView]);
+
+  // Set up event listeners
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img) return;
+
+    img.addEventListener('load', handleLoad);
+    img.addEventListener('error', handleError);
+
+    return () => {
+      img.removeEventListener('load', handleLoad);
+      img.removeEventListener('error', handleError);
+    };
+  }, [handleLoad, handleError]);
 
   return (
-    <img
-      ref={imgRef}
-      data-src={src}
-      alt={alt}
-      style={{
-        ...style,
-        opacity: isLoaded ? 1 : 0,
-        transition: 'opacity 0.3s ease-in-out',
-      }}
-      loading="lazy"
-      decoding="async"
-      {...props}
-    />
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <img
+        ref={imgRef}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        style={{
+          ...style,
+          opacity: isLoaded ? 1 : 0,
+          transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          willChange: 'opacity',
+        }}
+        {...props}
+      />
+      {!isLoaded && !hasError && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(110deg, #1a1a1a 8%, #222 18%, #1a1a1a 33%)',
+          backgroundSize: '200% 100%',
+          animation: 'shimmer 1.5s infinite',
+          borderRadius: 'inherit',
+        }} />
+      )}
+      {hasError && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#1a1a1a',
+          color: '#666',
+          borderRadius: 'inherit',
+        }}>
+          Failed to load image
+        </div>
+      )}
+      <style jsx global>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+      `}</style>
+    </div>
   );
 });
 
