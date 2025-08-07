@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaDiscord, FaYoutube, FaMailchimp } from 'react-icons/fa';
+import { FaDiscord, FaYoutube } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -14,34 +14,30 @@ const Footer = () => {
             <p className="text-gray-300 text-sm">Creating immersive gaming experiences</p>
           </div>
           
-          <div className="flex space-x-6">
-            <a 
-              href="https://discord.gg/5QdhYNQ5sR" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-gray-300 hover:text-blue-600 transition-colors duration-300 text-xl"
-              aria-label="Discord"
-            >
-              <FaDiscord className="w-6 h-6" />
-            </a>
-            <a 
-              href="https://youtube.com/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-gray-300 hover:text-red-600 transition-colors duration-300 text-xl"
-              aria-label="YouTube"
-            >
-              <FaYoutube className="w-6 h-6" />
-            </a>
-            {/* <a 
-              href="https://twitter.com/example" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-gray-300 hover:text-white transition-colors duration-300 text-xl"
-              aria-label="E-Mail"
-            >
-              <FaMailchimp className="w-6 h-6" />
-            </a> */}
+          <div className="flex flex-col items-center space-y-4">
+            <div className="flex space-x-6">
+              <a 
+                href="https://discord.gg/5QdhYNQ5sR" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gray-300 hover:text-blue-600 transition-colors duration-300 text-xl"
+                aria-label="Discord"
+              >
+                <FaDiscord className="w-6 h-6" />
+              </a>
+              <a 
+                href="https://www.youtube.com/@RecloneStudio" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gray-300 hover:text-red-600 transition-colors duration-300 text-xl"
+                aria-label="YouTube"
+              >
+                <FaYoutube className="w-6 h-6" />
+              </a>
+            </div>
+            <div className="text-gray-300 text-sm text-center">
+              Contact us: <a href="" className="text-blue-400 hover:underline">reclonestudios@gmail.com</a>
+            </div>
           </div>
         </div>
         
